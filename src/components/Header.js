@@ -9,14 +9,12 @@ import {
 import Amazonlogo from "../../public/amazonLogo.png";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const Header = () => {
+  const [showMenu, setMenu] = useState(false);
   const [user, setUser] = useState();
-  useEffect(() => {
-    const userData = localStorage.getItem("userdata");
-    setUser(JSON.parse(userData));
-  }, []);
+  const accountRef = useRef();
 
   const signIn = () => {
     signInWithPopup(auth, provider)
@@ -24,11 +22,31 @@ const Header = () => {
         // The signed-in user info.
         const userInfo = result.user;
         localStorage.setItem("userdata", JSON.stringify(userInfo));
+        window.location.reload();
       })
       .catch((error) => {
         // Handle Errors here.
         console.log(error.message);
       });
+  };
+
+  const signout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    //fetch user data form lcalstorage
+    const userData = localStorage.getItem("userdata");
+    setUser(JSON.parse(userData));
+    // menu function
+    return document.addEventListener("click", handleClickOutside, true);
+  }, []);
+
+  const handleClickOutside = (e) => {
+    if (!accountRef.current.contains(e.target)) {
+      setMenu(false);
+    }
   };
 
   return (
@@ -58,7 +76,10 @@ const Header = () => {
         </div>
         {/*basket*/}
         <div className="flex items-center justify-center text-sm space-x-5">
-          <div className="flex justify-center items-center">
+          <div
+            className="group  flex justify-center items-center"
+            onClick={() => setMenu(!showMenu)}
+          >
             {user ? (
               <img
                 src={user?.photoURL}
@@ -68,11 +89,27 @@ const Header = () => {
             ) : (
               <UserIcon className="h-7 text-white mr-5 ring-2 ring-white rounded-full p-1" />
             )}
-            <div className="flex flex-col  links" onClick={signIn}>
+            <div className="flex flex-col  links relative">
               <span>Hey, {user ? user.displayName : "sign in"}</span>
               <div className="font-bold  flex items-center">
                 Account & Lists <ChevronDownIcon className="h-5 ml-2" />
               </div>
+            </div>
+            <div
+              ref={accountRef}
+              className={`absolute flex flex-col  w-40 top-16 z-50 bg-white text-black
+              origin-top-right  ${showMenu ? "opacity-1" : "opacity-0"}`}
+            >
+              <button
+                className="border border-yellow-300 rounded-sm text-black 
+                bg-gradient-to-b from-yellow-200 to-yellow-400 py-2 font-bold text-left pl-4"
+                onClick={user ? signout : signIn}
+              >
+                {user ? "Sign out" : " Sign in"}
+              </button>
+              <button className=" py-2 font-bold bg-white text-left pl-4">
+                Account
+              </button>
             </div>
           </div>
 
