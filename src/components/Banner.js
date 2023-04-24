@@ -23,16 +23,16 @@ const Banner = () => {
         interval={5000}
       >
         <div>
-          <Image src={Bnnaer1} loading="lazy" quality={100} alt="banner" />
+          <Image src={Bnnaer1} priority={true} quality={100} alt="banner" />
         </div>
         <div>
-          <Image src={Bnnaer2} loading="lazy" quality={100} alt="banner" />
+          <Image src={Bnnaer2} priority={true} quality={100} alt="banner" />
         </div>
         <div>
-          <Image src={Bnnaer3} loading="lazy" quality={100} alt="banner" />
+          <Image src={Bnnaer3} priority={true} quality={100} alt="banner" />
         </div>
         <div>
-          <Image src={Bnnaer4} loading="lazy" quality={100} alt="banner" />
+          <Image src={Bnnaer4} priority={true} quality={100} alt="banner" />
         </div>
       </Carousel>
     </div>

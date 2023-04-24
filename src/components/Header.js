@@ -1,13 +1,36 @@
 import Image from "next/image";
-import Amazonlogo from "../../public/amazonLogo.png";
 import {
   MagnifyingGlassIcon,
   ShoppingCartIcon,
   ChevronDownIcon,
   Bars3Icon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
+import Amazonlogo from "../../public/amazonLogo.png";
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
+import { useState, useEffect } from "react";
 
 const Header = () => {
+  const [user, setUser] = useState();
+  useEffect(() => {
+    const userData = localStorage.getItem("userdata");
+    setUser(JSON.parse(userData));
+  }, []);
+
+  const signIn = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // The signed-in user info.
+        const userInfo = result.user;
+        localStorage.setItem("userdata", JSON.stringify(userInfo));
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        console.log(error.message);
+      });
+  };
+
   return (
     <header>
       {/*header top*/}
@@ -35,12 +58,24 @@ const Header = () => {
         </div>
         {/*basket*/}
         <div className="flex items-center justify-center text-sm space-x-5">
-          <div className="flex flex-col  links">
-            <span>Hey,Prince Muhammad</span>
-            <span className="font-bold  flex items-center">
-              Account & Lists <ChevronDownIcon className="h-5 ml-2" />
-            </span>
+          <div className="flex justify-center items-center">
+            {user ? (
+              <img
+                src={user?.photoURL}
+                alt="user"
+                className="w-10 rounded-full mr-3"
+              />
+            ) : (
+              <UserIcon className="h-7 text-white mr-5 ring-2 ring-white rounded-full p-1" />
+            )}
+            <div className="flex flex-col  links" onClick={signIn}>
+              <span>Hey, {user ? user.displayName : "sign in"}</span>
+              <div className="font-bold  flex items-center">
+                Account & Lists <ChevronDownIcon className="h-5 ml-2" />
+              </div>
+            </div>
           </div>
+
           <div className="flex flex-col   links">
             <span>Returns </span>
             <span className="font-bold "> & Order</span>
