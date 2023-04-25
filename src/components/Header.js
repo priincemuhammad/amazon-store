@@ -10,11 +10,15 @@ import Amazonlogo from "../../public/amazonLogo.png";
 import { auth, provider } from "../firebase";
 import { signInWithPopup } from "firebase/auth";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { selectItem } from "@/slices/basketSlice";
 
 const Header = () => {
   const [showMenu, setMenu] = useState(false);
   const [user, setUser] = useState();
   const accountRef = useRef();
+  const router = useRouter();
 
   const signIn = () => {
     signInWithPopup(auth, provider)
@@ -44,25 +48,29 @@ const Header = () => {
   }, []);
 
   const handleClickOutside = (e) => {
-    if (!accountRef.current.contains(e.target)) {
+    if (!accountRef.current?.contains(e.target)) {
       setMenu(false);
     }
   };
+
+  const items = useSelector(selectItem);
 
   return (
     <header>
       {/*header top*/}
       <div
         className="flex flex-grow-1   items-center bg-amazon_blue 
-      p-2 flex-grow py-2 space-x-5"
+      p-2 flex-grow py-3 space-x-5"
       >
         <div className="mt-2  flex flex-grow items-center md:flex-grow-0">
           <Image
+            onClick={() => router.push("/")}
             src={Amazonlogo}
             className="object-contain cursor-pointer w-20 sm:w-32"
             width={150}
             height={50}
             quality={100}
+            priority={true}
             alt="logo"
           />
         </div>
@@ -113,14 +121,17 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="flex flex-col   links">
+          <div className=" flex-col hidden  sm:flex links">
             <span>Returns </span>
             <span className="font-bold "> & Order</span>
           </div>
-          <div className="links flex items-center relative">
+          <div
+            onClick={() => router.push("/checkout")}
+            className="links flex items-center relative"
+          >
             <ShoppingCartIcon className="text-white h-10 sm:h-12  cursor-pointer" />
             <span className="absolute bottom-7 right-0 sm:right-10 font-bold text-xl">
-              0
+              {items ? items.length : 0}
             </span>
             <span className="hidden sm:inline font-bold">Basket</span>
           </div>

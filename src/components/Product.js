@@ -3,6 +3,8 @@ import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import Currency from "react-currency-formatter";
 import Prime from "../../public/prime.png";
+import { addTobasket } from "@/slices/basketSlice";
+import { useDispatch } from "react-redux";
 
 const MAX_RATE = 5;
 const MIN_RATE = 1;
@@ -10,8 +12,20 @@ const MIN_RATE = 1;
 const Product = ({ id, title, category, image, description, price }) => {
   let rate = Math.floor(Math.random() * (MAX_RATE - MIN_RATE + 1) + MIN_RATE);
   const [rating] = useState(5);
-
   const [hasPrime] = useState(Math.random() < 0.5);
+  const dispatch = useDispatch();
+
+  const addItemToBasket = () => {
+    const addTocart = {
+      id,
+      title,
+      category,
+      image,
+      description,
+      price,
+    };
+    dispatch(addTobasket(addTocart));
+  };
 
   return (
     <div className="relative flex flex-col bg-white m-5 z-30 p-10">
@@ -44,7 +58,9 @@ const Product = ({ id, title, category, image, description, price }) => {
         <p className="text-xs text-gray-500 my-5">Free Nextday Delivery!</p>
       </div>
       {/* )} */}
-      <button className="button">Add to basket</button>
+      <button className="button" onClick={addItemToBasket}>
+        Add to basket
+      </button>
     </div>
   );
 };

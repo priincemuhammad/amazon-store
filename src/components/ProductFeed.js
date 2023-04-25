@@ -4,7 +4,7 @@ const ProductFeed = ({ ...getData }) => {
   return (
     <div
       className="grid grid-flow-row-dense sm:grid-cols-2 
-     md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:-mt-56 md:-mt-48 mx-auto z-20"
+     md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:-mt-80 md:-mt-48 mx-auto z-20"
     >
       {getData.products
         .slice(0, 4)
