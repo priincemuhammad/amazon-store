@@ -129,8 +129,8 @@ const Header = () => {
             onClick={() => router.push("/checkout")}
             className="links flex items-center relative"
           >
-            <ShoppingCartIcon className="text-white h-10 sm:h-12  cursor-pointer" />
-            <span className="absolute bottom-7 right-0 sm:right-10 font-bold text-xl">
+            <ShoppingCartIcon className="text-white h-10 sm:h-10  cursor-pointer" />
+            <span className="absolute bottom-7 right-2 sm:right-14 font-bold text-xl">
               {items ? items.length : 0}
             </span>
             <span className="hidden sm:inline font-bold">Basket</span>
